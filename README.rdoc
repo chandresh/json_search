@@ -1,28 +1,11 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This app is a test application for searching data stored in a Json file. The application uses Ruby 2.2.3 and Rails 4.2.4
 
-Things you may want to cover:
+How to use:
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* Unzip json_search.zip
+* change directory to json_search
+* run bundle install
+* run rails server
+* point your browser to http://localhost:3000
