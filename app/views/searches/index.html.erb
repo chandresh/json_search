@@ -1,0 +1,10 @@
+<section class="search-box">
+  <%= form_for :search do |form| %>
+      <%= form.label :keyword %>
+      <%= form.text_field :keyword %>
+      <%= form.submit :search %>
+  <% end %>
+</section>
+<section class="search-results">
+
+</section>
