@@ -9,3 +9,7 @@ How to use:
 * run bundle install
 * run rails server
 * point your browser to http://localhost:3000
+
+To run the tests, use
+
+rake test
