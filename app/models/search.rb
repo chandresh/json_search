@@ -19,7 +19,8 @@ class Search
   end
 
   def results
-    match_tokens(remove_negative_tokens(data))
+    set_relevance_data(remove_negative_tokens(data))
+        .reject { |result| result.frequency == 0 } # Remove results with zero frequency
   end
 
   private
@@ -36,17 +37,24 @@ class Search
 
   end
 
-# This method takes in data in an array and returns an array containing all results with tokens
-  def match_tokens(data)
+
+  # This method takes in data in an array and matches with the tokens to set the frequency and exact matches
+  def set_relevance_data(data)
     @tokens.each do |token|
-      data = data.select do |row|
-        row.name.downcase.include?(token) || row.type.downcase.include?(token) || row.designed_by.downcase.include?(token)
+      data.each do |result|
+        result.frequency     = result.name.downcase.scan(/#{token}/).count +
+            result.type.downcase.scan(/#{token}/).count + result.designed_by.downcase.scan(/#{token}/).count
+
+        result.exact_matches += 1 if (result.name.downcase == token)
+        result.exact_matches += 1 if (result.type.downcase == token)
+        result.exact_matches += 1 if (result.designed_by.downcase == token)
+
       end
     end
     data
   end
 
-# This method takes in data in an array and returns an array removing all results containing negative tokens
+  # This method takes in data in an array and returns an array removing all results containing negative tokens
   def remove_negative_tokens(data)
     @negative_tokens.each do |negative_token|
       data = data.reject do |row|
@@ -65,14 +73,22 @@ class Search
   end
 
   class Result
-    attr_reader :name, :type, :designed_by, :relevance
+    attr_reader :name, :type, :designed_by
+    attr_accessor :frequency, :exact_matches
 
     def initialize(name:, type:, designed_by:)
-      @name        = name
-      @type        = type
-      @designed_by = designed_by
-      @relevance   = 0
+      @name          = name
+      @type          = type
+      @designed_by   = designed_by
+      @frequency     = 0
+      @exact_matches = 0
     end
+
+    def relevance
+      # Frequency plus half of exact matches
+      @frequency + (@exact_matches / 2.0)
+    end
+
   end
 
 end

@@ -29,4 +29,18 @@ class SearchesTest < ActionController::TestCase
     refute_includes(@search.results.map { |row| row.name }, 'S')
   end
 
+  test 'results have correct relevance' do
+    # relevance = frequency + (exact_matches / 2.0)
+
+    @search = Search.new('Java')
+    # There should be 2 results
+    # Java should come first and JavaScript last
+    # Java should have a score of 1.5 and JavaScript 1.0
+    assert_equal(@search.results.count, 2)
+    assert_equal(@search.results.first.name, 'Java')
+    assert_equal(@search.results.first.relevance, 1.5)
+    assert_equal(@search.results.last.name, 'JavaScript')
+    assert_equal(@search.results.last.relevance, 1.0)
+  end
+
 end
