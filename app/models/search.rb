@@ -42,10 +42,10 @@ class Search
   def set_relevance_data(data)
     @tokens.each do |token|
       data.each do |result|
-        result.frequency     =
-            result.name.downcase.scan("#{token}").count +
+        result.frequency     +=
+            (result.name.downcase.scan("#{token}").count +
                 result.type.downcase.scan("#{token}").count +
-                result.designed_by.downcase.scan("#{token}").count
+                result.designed_by.downcase.scan("#{token}").count)
 
         result.exact_matches += 1 if (result.name.downcase == token)
         result.exact_matches += 1 if (result.type.downcase == token)
