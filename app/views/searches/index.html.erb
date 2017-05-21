@@ -1,22 +1,44 @@
-<section class="search-box">
-
-  <%= form_for :search, method: 'GET' do |form| %>
-      <%= form.label :keywords %>
-      <%= form.text_field :keywords %>
-      <%= form.submit :search %>
+<header>
+  <h1 class="h2">Language Search</h1>
+</header>
+<section class="search-form">
+  <%= form_for :search, method: :get do |form| %>
+      <div class="input-group input-group-lg">
+        <%= form.label :keywords, nil, class: "sr-only" %>
+        <%= form.text_field :keywords,
+                            placeholder: "Name, Type, Designed by",
+                            class:       "form-control input-lg" %>
+        <span class="input-group-btn">
+        <%= form.submit "Find Languages",
+                        class: "btn btn-primary btn-lg" %>
+      </span>
+      </div>
   <% end %>
-
 </section>
 
-<% if @search %>
-    <section class="search">
-      <header><h2> Search results for: <%= @search.keywords %> </h2></header>
-      <section class="search-results">
-        <% @search.results.each do |result| %>
-            <article class="search-result">
-              <%= result.name %>
-            </article>
+<% if @search && @search_results.any? %>
+    <section class="search-results">
+      <header>
+        <h1 class="h3">
+          <header><h2> Search results for: <%= @search.keywords %> </h2></header>
+        </h1>
+      </header>
+
+      <ol class="list-group">
+        <% @search_results.each do |result| %>
+            <li class="list-group-item clearfix">
+              <h2 class="h3">
+                <%= result.name %>
+                <small><%= result.type %></small>
+              </h2>
+              <h4><%= result.designed_by %></h4>
+            </li>
         <% end %>
-      </section>
+      </ol>
+      <%#= render partial: "pager", locals: { keywords: @keywords, page: @page } %>
+    </section>
+<% elsif @search && @search_results.none? %>
+    <section class="search-results">
+      <h4>No results found for your keywords <%= @search.keywords %></h4>
     </section>
 <% end %>

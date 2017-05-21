@@ -40,9 +40,10 @@ class Search
 
   # This method takes in data in an array and matches with the tokens to set the frequency and exact matches
   def set_relevance_data(data)
-    @tokens.each do |token|
-      data.each do |result|
-        result.frequency     +=
+    data.each do |result|
+      token_frequency = 0
+      @tokens.each do |token|
+        token_frequency      =
             (result.name.downcase.scan("#{token}").count +
                 result.type.downcase.scan("#{token}").count +
                 result.designed_by.downcase.scan("#{token}").count)
@@ -51,7 +52,15 @@ class Search
         result.exact_matches += 1 if (result.type.downcase == token)
         result.exact_matches += 1 if (result.designed_by.downcase == token)
 
+        if token_frequency == 0
+          result.frequency = 0
+          break
+        else
+          result.frequency += token_frequency
+        end
+
       end
+
     end
     data
   end
