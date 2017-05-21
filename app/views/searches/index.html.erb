@@ -1,10 +1,22 @@
 <section class="search-box">
-  <%= form_for :search do |form| %>
-      <%= form.label :keyword %>
-      <%= form.text_field :keyword %>
+
+  <%= form_for :search, method: 'GET' do |form| %>
+      <%= form.label :keywords %>
+      <%= form.text_field :keywords %>
       <%= form.submit :search %>
   <% end %>
-</section>
-<section class="search-results">
 
 </section>
+
+<% if @search %>
+    <section class="search">
+      <header><h2> Search results for: <%= @search.keywords %> </h2></header>
+      <section class="search-results">
+        <% @search.results.each do |result| %>
+            <article class="search-result">
+              <%= result.name %>
+            </article>
+        <% end %>
+      </section>
+    </section>
+<% end %>
